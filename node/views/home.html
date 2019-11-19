@@ -11,6 +11,10 @@
 <script>
 
 	$( function() {
+		var bgImage = localStorage.getItem("backgroundImage")
+		if (bgImage) {
+			document.body.style.backgroundImage = `url(${bgImage}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5))`
+		}
 		$("#weatherContainer").draggable()
 		$("#backgroundImageContainer").draggable()
 	})

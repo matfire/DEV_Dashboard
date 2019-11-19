@@ -26,8 +26,9 @@
 	var images = []
 	function setBgImage(image) {
 		console.log(image)
-		document.body.style.backgroundImage = `url(${image.urls.full})`
-		document.body.style.backgroundSize = "cover"
+		document.body.style.backgroundImage = `url(${image.urls.full}), linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5))`
+		document.getElementById("footer").style.color = "white"
+		localStorage.setItem("backgroundImage", image.urls.full)
 	}
 
 
