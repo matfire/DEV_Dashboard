@@ -4,6 +4,7 @@
 	<div class="uk-grid uk-text-center" uk-grid>
 		{% include "widgets/weather/index.html" %}
 		{% include "widgets/unsplash/index.html" %}
+		{%if user.spotifyToken%}{% include "widgets/spotify/index.html" %}{%endif%}
 	</div>
 {% endblock %}
 

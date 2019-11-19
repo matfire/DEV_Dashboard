@@ -27,7 +27,7 @@
 					<li id="weatherShower"><a>Weather</a></li>
 					<li id="unsplashShower"><a>Unsplash Background Selector</a></li>
 					<li class="uk-nav-header">Widgets with authorization</li>
-					<li><a href="/auth/spotify">Bitly</a></li>
+					<li>{%if user.spotifyToken%}<span id="spotifyShower" uk-icon="plus-circle"/> {%endif%}<a href="/auth/spotify">Spotify</a></li>
 				</ul>
 			</div>
 		</div>

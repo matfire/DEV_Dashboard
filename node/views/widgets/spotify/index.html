@@ -1,0 +1,43 @@
+<div class="uk-card" id="spotifyContainer">
+	<div class="uk-card uk-card-default">
+		<div class="uk-card-header">
+				<h3 class="uk-card-title uk-align-left">Spotify Info</h3> 
+				<div class="uk-align-right">
+					<span uk-icon="close" id="closeSpotify" style="margin-right: 3px;"/>
+					<span uk-icon="info" uk-tooltip="This widget allows you to see the current weather"/>
+				</div>
+		</div>
+		<div class="uk-card-body" >
+			<span id="weatherCity"></span>
+			<div id="weatherBody"></div>
+		</div>
+		<div class="uk-card-footer">
+			<button id="positionDetection" class="uk-button uk-button-default">Detect Position</button> <a href="#spotifyModal" uk-toggle uk-icon="settings"></a>
+		</div>
+	</div>
+</div>
+
+<div id="spotifyModal" uk-modal>
+		<div class="uk-modal-dialog uk-modal-body">
+			<h2 class="uk-modal-title">Spotify Widget Settings</h2>
+			<div class="uk-margin">
+				<input type="text" class="uk-input" placeholder="Enter your city" id="weatherCityInput">
+			</div>
+			<p class="uk-text-right">
+				<button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+				<button class="uk-button uk-button-primary uk-modal-close" type="button" id="weatherButtonCitySelection">Save</button>
+			</p>
+		</div>
+	</div>
+
+<script>
+	document.getElementById("closeSpotify").onclick = (ev) => {		
+		document.getElementById("spotifyContainer").style.visibility = "hidden"
+	}
+	document.getElementById("spotifyShower").onclick = (ev) => {
+		document.getElementById("spotifyContainer").style.visibility = "visible"
+	}
+	document.onloadend = (ev) => {
+		console.log("loaded spotify")
+	}
+</script>
