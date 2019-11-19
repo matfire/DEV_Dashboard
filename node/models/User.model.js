@@ -4,7 +4,7 @@ var UserSchema = new mongoose.Schema({
 	email: {type: String, unique:true},
 	githubToken: String,
 	googleToken: String,
-	digitalOceanToken: String,
+	trelloToken: String,
 	password: String
 })
 

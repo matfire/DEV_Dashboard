@@ -11,20 +11,23 @@
 
 <body style="background-size: cover; background-blend-mode: overlay; min-height: 100vh">
 	<header>
-		<nav class="uk-navbar-container" uk-navbar style="background-color: lightblue;">
+		<nav class="uk-navbar-container" uk-navbar id="navId" style="background-color: lightblue;">
 			<div class="uk-navbar-left">
-					<a href="#offcanvas-menu" uk-toggle uk-icon="icon: menu; ratio:2"></a>
+					<a href="#offcanvas-menu" uk-toggle uk-icon="icon: menu; ratio:2" style="color: white;"></a>
 			</div>
 			<div class="uk-navbar-center">
-				<a href="" class="uk-navbar-item uk-logo">Dashboard</a>
+				<a href="" class="uk-navbar-item uk-logo" style="color: white;">Dashboard</a>
 			</div>
 		</nav>
 	</header>
 	<div id="offcanvas-menu" uk-offcanvas>
 			<div class="uk-offcanvas-bar">
 				<ul class="uk-nav uk-nav-default">
+				    <li class="uk-nav-header">Public Widgets</li>
 					<li id="weatherShower"><a>Weather</a></li>
 					<li id="unsplashShower"><a>Unsplash Background Selector</a></li>
+					<li class="uk-nav-header">Widgets with authorization</li>
+					<li><a href="/auth/spotify">Bitly</a></li>
 				</ul>
 			</div>
 		</div>

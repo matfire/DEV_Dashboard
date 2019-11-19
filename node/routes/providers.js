@@ -1,9 +1,9 @@
 const router = require("express").Router()
+const User = require("../models/User.model");
+var request = require('request'); // "Request" library
 
-
-router.get("/digitalocean", (req, res) => {
-	console.log(req.params, req.query)
-	res.send("ok")
+router.get("/spotify", (req, res) => {
+	res.send(req.query)
 })
 
 module.exports = router
