@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Dashboard</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.3/dist/css/uikit.min.css" />
+</head>
+
+<body >
+	<header>
+		<nav class="uk-navbar-container" uk-navbar style="background-color: lightblue;">
+			<div class="uk-navbar-left">
+					<a href="#offcanvas-menu" uk-toggle uk-icon="icon: menu; ratio:2"></a>
+			</div>
+			<div class="uk-navbar-center">
+				<a href="" class="uk-navbar-item uk-logo">Dashboard</a>
+			</div>
+		</nav>
+	</header>
+	<div id="offcanvas-menu" uk-offcanvas>
+			<div class="uk-offcanvas-bar">
+				<ul class="uk-nav uk-nav-default">
+					<li id="weatherShower"><a>Weather</a></li>
+					<li id="unsplashShower"><a>Unsplash Background Selector</a></li>
+				</ul>
+			</div>
+		</div>
+	{% if errors %}
+		{% for error in errors %}
+			<div class="uk-alert-danger" uk-alert>
+				    <a class="uk-alert-close" uk-close></a>
+				{{error}}
+			</div>
+		{% endfor %}
+	{% endif %}
+	<div class="uk-container" id="container">
+		<div style="margin-top: 5%; padding-top: 5%;">
+			{% block body %}
+
+			{% endblock %}
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/uikit@3.2.3/dist/js/uikit.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/uikit@3.2.3/dist/js/uikit-icons.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	{% block js %}
+	{% endblock %}
+</body>
+<footer style="  position: fixed;
+left: 0;
+bottom: 0;
+width: 100%;
+text-align: center;">
+	Made with 💜 by Matteo Gassend and Vincent Ferrard
+</footer>
+
+</html>

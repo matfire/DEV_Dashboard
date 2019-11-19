@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block body %}
+	<div class="uk-grid uk-text-center" uk-grid>
+		{% include "widgets/weather/index.html" %}
+		{% include "widgets/unsplash/index.html" %}
+	</div>
+{% endblock %}
+
+{% block js %}
+<script>
+
+	$( function() {
+		$("#weatherContainer").draggable()
+		$("#backgroundImageContainer").draggable()
+	})
+</script>
+{% endblock %}

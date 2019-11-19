@@ -1,0 +1,72 @@
+<div class="uk-card" id="weatherContainer">
+	<div class="uk-card uk-card-default">
+		<div class="uk-card-header">
+				<h3 class="uk-card-title uk-align-left">Weather</h3> 
+				<div class="uk-align-right">
+					<span uk-icon="close" id="closeWeather" style="margin-right: 3px;"/>
+					<span uk-icon="info" uk-tooltip="This widget allows you to see the current weather"/>
+				</div>
+		</div>
+		<div class="uk-card-body" >
+			<span id="weatherCity"></span>
+			<div id="weatherBody"></div>
+		</div>
+		<div class="uk-card-footer">
+			<button id="positionDetection" class="uk-button uk-button-default">Detect Position</button> <a href="#weatherModal" uk-toggle uk-icon="settings"></a>
+		</div>
+	</div>
+</div>
+
+<div id="weatherModal" uk-modal>
+		<div class="uk-modal-dialog uk-modal-body">
+			<h2 class="uk-modal-title">Weather Widget Settings</h2>
+			<div class="uk-margin">
+				<input type="text" class="uk-input" placeholder="Enter your city" id="weatherCityInput">
+			</div>
+			<p class="uk-text-right">
+				<button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+				<button class="uk-button uk-button-primary uk-modal-close" type="button" id="weatherButtonCitySelection">Save</button>
+			</p>
+		</div>
+	</div>
+
+<script>
+		function displayTemp(temp, icon) {
+			document.getElementById("weatherBody").innerHTML = `\
+			<img data-src="https://openweathermap.org/img/w/${icon}.png" uk-img/>\
+			<span>${temp}</span>\
+			`
+		}
+		document.getElementById("closeWeather").onclick = (ev) => {
+			document.getElementById("weatherContainer").style.visibility = "hidden"
+		}
+		document.getElementById("weatherShower").onclick = (ev) => {
+			document.getElementById("weatherContainer").style.visibility = "visible"
+		}
+
+		document.getElementById("weatherButtonCitySelection").onclick = (ev) => {
+			var city = document.getElementById("weatherCityInput").value
+			document.getElementById("weatherBody").innerHTML = '<div uk-spinner="ratio: 3"></div>'
+			fetch("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=9d9ab4467244bce9a0a31fcbeb8ecb4c").then((res) => {
+				res.json().then((data) => {
+					document.getElementById("weatherCity").innerText = city
+					displayTemp(data.main.temp, data.weather[0].icon)
+					UIkit.notification("<span uk-icon='icon: check'></span> Settings updated");
+				})
+			})
+		}
+
+		document.getElementById("positionDetection").onclick = (ev) => {
+			document.getElementById("weatherBody").innerHTML = '<div uk-spinner="ratio: 3"></div>'
+			navigator.geolocation.getCurrentPosition((position) => {
+				console.log(position)
+				fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + position.coords.latitude + "&lon=" + position.coords.longitude + "&units=metric&APPID=9d9ab4467244bce9a0a31fcbeb8ecb4c").then((res) => {
+					res.json().then((data) => {
+						displayTemp(data.main.temp, data.weather[0].icon)
+					})
+				})
+			}, (position) => {
+				alert("You can always set it manually")
+			})
+		}
+</script>
