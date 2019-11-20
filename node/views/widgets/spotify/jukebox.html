@@ -1,9 +1,9 @@
-<div class="uk-card" id="spotifyJukeboxContainer">
+<div class="uk-card" id="spotifyJukeboxContainer" style="visibility: hidden;">
 	<div class="uk-card uk-card-default">
 		<div class="uk-card-header">
 				<h3 class="uk-card-title uk-align-left">Spotify Jukebox</h3> 
 				<div class="uk-align-right">
-					<span uk-icon="close" id="closeSpotify" style="margin-right: 3px;"/>
+					<span uk-icon="close" id="closeSpotifyJukebox" style="margin-right: 3px;"/>
 					<span uk-icon="info" uk-tooltip="Play, pause and change the playing track"/>
 				</div>
 		</div>
@@ -20,6 +20,7 @@
 
 <script>
 	var devicePlayerTimer = 50000
+	var devicePlayerTimerReturn;
 	let token = "{{user.spotifyToken}}"
 
 	function fillTracksDetails(data) {
@@ -55,7 +56,7 @@
 	}
 	var devicePlayerTime = async function() {
 		await getPlayerDetails()
-		setTimeout(devicePlayerTime, devicePlayerTimer)
+		devicePlayerTimerReturn = setTimeout(devicePlayerTime, devicePlayerTimer)
 	}
 	document.getElementById("playPauseJukeboxButton").onclick = async(ev) => {
 		let resDevices = await fetch(`${baseSpotifyUrl}/v1/me/player/devices`, {
@@ -82,11 +83,13 @@
 		}
 		getPlayerDetails()
 	}
-	document.getElementById("closeSpotify").onclick = (ev) => {		
-		document.getElementById("spotifyContainer").style.visibility = "hidden"
+	document.getElementById("closeSpotifyJukebox").onclick = (ev) => {		
+		document.getElementById("spotifyJukeboxContainer").style.visibility = "hidden"
+		clearTimeout(devicePlayerTimerReturn)
 	}
-	document.getElementById("spotifyShower").onclick = (ev) => {
-		document.getElementById("spotifyContainer").style.visibility = "visible"
+	document.getElementById("spotifyJukeboxShower").onclick = (ev) => {
+		devicePlayerTime()
+		document.getElementById("spotifyJukeboxContainer").style.visibility = "visible"
 	}
 	document.getElementById("previousTrackJukebox").onclick = async() => {
 		let resDevices = await fetch(`${baseSpotifyUrl}/v1/me/player/devices`, {
@@ -121,7 +124,9 @@
 		getPlayerDetails()
 	}
 	document.addEventListener("DOMContentLoaded", async() => {
-		devicePlayerTime()
+		if (document.getElementById("spotifyJukeboxContainer").style.visibility === "visible") {
+			devicePlayerTime()
+		}
 	})
 
 </script>

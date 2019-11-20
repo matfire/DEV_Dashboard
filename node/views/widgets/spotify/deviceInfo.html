@@ -34,6 +34,7 @@
 <script>
 	const baseSpotifyUrl = "https://api.spotify.com"
 	var deviceListTimer = 10000
+	var deviceListTimerReturn;
 	function generateDeviceItem(name, id, is_active, type, volume) {
 		let li = document.createElement("li")
 		let typeIcon = document.createElement("span")
@@ -79,16 +80,20 @@
 	}
 	var deviceListTime = async function() {
 		await getDeviceList()
-		setTimeout(deviceListTime, deviceListTimer)
+		deviceListTimerReturn = setTimeout(deviceListTime, deviceListTimer)
 	}
 	document.getElementById("closeSpotify").onclick = (ev) => {		
 		document.getElementById("spotifyContainer").style.visibility = "hidden"
+		clearTimeout(deviceListTimerReturn)
 	}
-	document.getElementById("spotifyShower").onclick = (ev) => {
+	document.getElementById("spotifyDeviceShower").onclick = (ev) => {
 		document.getElementById("spotifyContainer").style.visibility = "visible"
+		deviceListTime()
 	}
 	document.addEventListener("DOMContentLoaded", async() => {
-		deviceListTime()
+		if (document.getElementById("spotifyContainer").style.visibility === "visible") {
+			deviceListTime()
+		}
 	})
 
 </script>

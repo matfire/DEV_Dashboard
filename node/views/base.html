@@ -30,7 +30,17 @@
 					<li id="weatherShower"><a>Weather</a></li>
 					<li id="unsplashShower"><a>Unsplash Background Selector</a></li>
 					<li class="uk-nav-header">Widgets with authorization</li>
-					<li>{%if user.spotifyToken%}<span id="spotifyShower" uk-icon="plus-circle"/> {%endif%}<a href="/auth/spotify">Spotify</a></li>
+					{% if user.spotifyToken %}
+					<li class="uk-parent">
+						<a href="#">Spotify</a>
+						<ul class="uk-nav-sub">
+							<li id="spotifyDeviceShower">Spotify Devices Info</li>
+							<li id="spotifyJukeboxShower">Spotify Jukebox</li>
+						</ul>
+					</li>
+					{% else %}
+					<li><a href="/auth/spotify">Spotify</a></li>
+					{% endif %}
 				</ul>
 			</div>
 		</div>
