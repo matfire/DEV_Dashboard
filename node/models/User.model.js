@@ -5,6 +5,7 @@ var UserSchema = new mongoose.Schema({
 	githubToken: String,
 	googleToken: String,
 	spotifyToken: String,
+	digitalOceanToken: String,
 	password: String
 })
 

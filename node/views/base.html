@@ -41,6 +41,16 @@
 					{% else %}
 					<li><a href="/auth/spotify">Spotify</a></li>
 					{% endif %}
+					{%if user.digitalOceanToken%}
+					<li class="uk-parent">
+						<a href="#">Digital Ocean</a>
+						<ul class="uk-nav-sub">
+							<li id="digitalDroplets">Droplets</li>
+						</ul>
+					</li>
+					{%else%}
+					<li><a href="/auth/digitalocean">Digital Ocean</a></li>
+					{%endif%}
 				</ul>
 			</div>
 		</div>

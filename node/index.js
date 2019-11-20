@@ -14,7 +14,9 @@ const User = require("./models/User.model")
 const redis = require('redis');
 const SpotifyStrategy = require('passport-spotify').Strategy;
 const LocalStrategy = require("passport-local").Strategy;
+const DigitalOceanStrategy = require("passport-digitalocean").Strategy;
 const passport = require("passport")
+const fetch = require("node-fetch")
 
 const redisClient = redis.createClient({host:process.env.REDIS || "127.0.0.1"});
 const redisStore = require('connect-redis')(session);
@@ -72,6 +74,29 @@ passport.use(
 )
 
 passport.use(
+	new DigitalOceanStrategy({
+		clientID:"a854f75482023fefd03b59af436cde7a739c2afd9a62959010157acba46b8673",
+		clientSecret:"64599a2d29f7ad84ff87023520552e4e915011c79a27a6149b76267919a00029",
+		callbackURL: "http://localhost:8080/auth/digitalocean"
+	},
+	async function(accessToken, refreshToken, expires_in, profile, done) {
+		let res = await fetch("https://api.digitalocean.com/v2/account", {
+			headers: {
+				"Authorization": `Bearer ${accessToken}`
+			}
+		})
+		let json = await res.json()
+		var user = await User.findOne({email:json.account.email})
+		if (user) {
+			user.digitalOceanToken = accessToken
+			await user.save()
+			return done(null, user)
+		}
+	}
+	)
+)
+
+passport.use(
 	new SpotifyStrategy(
 		{
 			clientID: "2cfa586c6c43457aadb736344d842dcc",
@@ -79,11 +104,6 @@ passport.use(
 			callbackURL: 'http://localhost:8080/auth/spotify',
 		},
 		async function(accessToken, refreshToken, expires_in, profile, done) {
-			console.log(profile)
-			// var res = await axios.default.get("https://api.spotify.com/v1/me", {headers:{"Authorization":`Bearer ${accessToken}`}})
-			// if (res.data) {
-			// 	console.log(res.data)
-			// }
 			var user = await User.findOne({email:profile.emails[0].value})
 			if (user) {
 				user.spotifyToken = accessToken
@@ -161,6 +181,12 @@ passport.use(
 		app.get("/auth/spotify", passport.authenticate("spotify", {
 			scope:["user-read-recently-played", "user-read-playback-state", "user-read-currently-playing", "user-modify-playback-state", "streaming app-remote-control", "user-read-email"],
 			successRedirect : "/"
+		}))
+
+		app.get("/auth/digitalocean", passport.authenticate("digitalocean", {
+			scope:["read"],
+			successRedirect: "/",
+			failureRedirect: "/login"
 		}))
 		
 		
