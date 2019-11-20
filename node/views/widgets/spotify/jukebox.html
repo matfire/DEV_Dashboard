@@ -1,0 +1,127 @@
+<div class="uk-card" id="spotifyJukeboxContainer">
+	<div class="uk-card uk-card-default">
+		<div class="uk-card-header">
+				<h3 class="uk-card-title uk-align-left">Spotify Jukebox</h3> 
+				<div class="uk-align-right">
+					<span uk-icon="close" id="closeSpotify" style="margin-right: 3px;"/>
+					<span uk-icon="info" uk-tooltip="Play, pause and change the playing track"/>
+				</div>
+		</div>
+		<div class="uk-card-body" >
+			<div id="spotifyJukeboxContent"></div>
+		</div>
+		<div class="uk-card-footer">
+				<span id="previousTrackJukebox" class="uk-button" uk-icon="chevron-double-left"></span>
+				<span id="playPauseJukeboxButton" class="uk-button"></span>
+				<span id="nextTrackJukebox" class="uk-button" uk-icon="chevron-double-right"></span>
+		</div>
+	</div>
+</div>
+
+<script>
+	var devicePlayerTimer = 50000
+	let token = "{{user.spotifyToken}}"
+
+	function fillTracksDetails(data) {
+		$( "#spotifyJukeboxContent" ).html( `<img src=${data.item.album.images[0].url} width=150/>
+		<div style="text-align: center;">
+			<h4>${data.item.name}</h4>
+			<h5>${data.item.album.name}</h5>
+			<p>${data.item.artists[0].name}</p>
+		</div>
+		` );
+		if (data.is_playing) {
+			document.getElementById("playPauseJukeboxButton").setAttribute("uk-icon", "ban")
+		} else {
+			document.getElementById("playPauseJukeboxButton").setAttribute("uk-icon", "play")
+		}
+	}
+	async function getPlayerDetails() {
+		try {
+			let res = await fetch(`${baseSpotifyUrl}/v1/me/player/currently-playing`, {
+				headers: {
+					"Authorization": `Bearer ${token}`
+				}
+			})
+			if (res.ok && res.status === 200) {
+				let json = await res.json()
+				console.log(json)
+				fillTracksDetails(json)
+			} else if (res.status === 204) {
+				$("#spotifyJukeboxContent").html(`No track is currently playing`)
+			}
+		} catch {
+		}
+	}
+	var devicePlayerTime = async function() {
+		await getPlayerDetails()
+		setTimeout(devicePlayerTime, devicePlayerTimer)
+	}
+	document.getElementById("playPauseJukeboxButton").onclick = async(ev) => {
+		let resDevices = await fetch(`${baseSpotifyUrl}/v1/me/player/devices`, {
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		})
+		let jsonDevices = await resDevices.json()
+		let currentDevice = jsonDevices.devices.find((e) => e.is_active)
+		if (document.getElementById("playPauseJukeboxButton").getAttribute("uk-icon") === "ban") {
+			await fetch("https://api.spotify.com/v1/me/player/pause?device_id=" + currentDevice.id, {
+				method:"PUT",
+				headers: {
+					"Authorization": `Bearer ${token}`
+				},
+			})
+		} else {
+			await fetch("https://api.spotify.com/v1/me/player/play?device_id=" + currentDevice.id, {
+				method:"PUT",
+				headers: {
+					"Authorization": `Bearer ${token}`
+				},
+			})			
+		}
+		getPlayerDetails()
+	}
+	document.getElementById("closeSpotify").onclick = (ev) => {		
+		document.getElementById("spotifyContainer").style.visibility = "hidden"
+	}
+	document.getElementById("spotifyShower").onclick = (ev) => {
+		document.getElementById("spotifyContainer").style.visibility = "visible"
+	}
+	document.getElementById("previousTrackJukebox").onclick = async() => {
+		let resDevices = await fetch(`${baseSpotifyUrl}/v1/me/player/devices`, {
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		})
+		let jsonDevices = await resDevices.json()
+		let currentDevice = jsonDevices.devices.find((e) => e.is_active)
+		await fetch("https://api.spotify.com/v1/me/player/previous?device_id=" + currentDevice.id, {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		})
+		getPlayerDetails()
+	}
+	document.getElementById("nextTrackJukebox").onclick = async() => {
+		let resDevices = await fetch(`${baseSpotifyUrl}/v1/me/player/devices`, {
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		})
+		let jsonDevices = await resDevices.json()
+		let currentDevice = jsonDevices.devices.find((e) => e.is_active)
+		await fetch("https://api.spotify.com/v1/me/player/next?device_id=" + currentDevice.id, {
+			method: "POST",
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		})
+		getPlayerDetails()
+	}
+	document.addEventListener("DOMContentLoaded", async() => {
+		devicePlayerTime()
+	})
+
+</script>

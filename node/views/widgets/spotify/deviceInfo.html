@@ -1,0 +1,94 @@
+<div class="uk-card" id="spotifyContainer" style="visibility : hidden;">
+	<div class="uk-card uk-card-default">
+		<div class="uk-card-header">
+				<h3 class="uk-card-title uk-align-left">Spotify Info</h3> 
+				<div class="uk-align-right">
+					<span uk-icon="close" id="closeSpotify" style="margin-right: 3px;"/>
+					<span uk-icon="info" uk-tooltip="Get a timer-updated status of all spotify players"/>
+				</div>
+		</div>
+		<div class="uk-card-body" >
+			<ul class="uk-list" id="spotifyDeviceList">
+
+			</ul>
+		</div>
+		{# <div class="uk-card-footer">
+			<button id="positionDetection" class="uk-button uk-button-default">Detect Position</button> <a href="#spotifyModal" uk-toggle uk-icon="settings"></a>
+		</div> #}
+	</div>
+</div>
+
+<div id="spotifyModal" uk-modal>
+		<div class="uk-modal-dialog uk-modal-body">
+			<h2 class="uk-modal-title">Spotify Widget Settings</h2>
+			<div class="uk-margin">
+				{# <input type="text" class="uk-input" placeholder="Enter your city" id="weatherCityInput"> #}
+			</div>
+			<p class="uk-text-right">
+				<button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+				<button class="uk-button uk-button-primary uk-modal-close" type="button" id="spotifyButtonCitySelection">Save</button>
+			</p>
+		</div>
+	</div>
+
+<script>
+	const baseSpotifyUrl = "https://api.spotify.com"
+	var deviceListTimer = 10000
+	function generateDeviceItem(name, id, is_active, type, volume) {
+		let li = document.createElement("li")
+		let typeIcon = document.createElement("span")
+		switch(type) {
+			case "Computer":
+				typeIcon.setAttribute("uk-icon", "laptop")
+				break
+			case "Smartphone":
+				typeIcon.setAttribute("uk-icon", "phone")
+				break
+			default:
+				break
+		}
+		if (is_active) {
+			li.style.color = "green"
+		}
+		li.appendChild(typeIcon)
+		li.appendChild(document.createTextNode(name))
+		return li
+	}
+
+	async function getDeviceList() {
+		let token = "{{user.spotifyToken}}"
+		try {
+			let res = await fetch(`${baseSpotifyUrl}/v1/me/player/devices`, {
+				headers: {
+					"Authorization": `Bearer ${token}`
+				}
+			})
+			if (res.ok && res.status == 200) {
+				let json = await res.json()
+				let ul = document.getElementById("spotifyDeviceList")
+				ul.innerHTML = ""
+				json.devices.forEach(device => {
+					let {name, id, is_active, type, volume_percent} = device
+					let li = generateDeviceItem(name, id, is_active, type, volume_percent)
+					ul.appendChild(li)
+				})
+			}
+		} catch {
+
+		}
+	}
+	var deviceListTime = async function() {
+		await getDeviceList()
+		setTimeout(deviceListTime, deviceListTimer)
+	}
+	document.getElementById("closeSpotify").onclick = (ev) => {		
+		document.getElementById("spotifyContainer").style.visibility = "hidden"
+	}
+	document.getElementById("spotifyShower").onclick = (ev) => {
+		document.getElementById("spotifyContainer").style.visibility = "visible"
+	}
+	document.addEventListener("DOMContentLoaded", async() => {
+		deviceListTime()
+	})
+
+</script>

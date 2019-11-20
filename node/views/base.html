@@ -11,6 +11,8 @@
 </head>
 
 <body style="background-size: cover; background-blend-mode: overlay; min-height: 100vh">
+	<div id="page-container">
+		<div id="page-wrap">
 	<header>
 		<nav class="uk-navbar-container" uk-navbar id="navId" style="background-color: lightblue;">
 			<div class="uk-navbar-left">
@@ -51,15 +53,22 @@
 	<script src="https://cdn.jsdelivr.net/npm/uikit@3.2.3/dist/js/uikit-icons.min.js"></script>
 	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script>
+			window.addEventListener("offline", function(e) {
+				alert("offline");
+			  }, false);
+			  
+			  window.addEventListener("online", function(e) {
+				alert("online");
+			  }, false);
+	</script>
 	{% block js %}
 	{% endblock %}
+		</div>
+	<footer id="footer" >
+		Made with 💜 by Matteo Gassend and Vincent Ferrard
+	</footer>
+	</div>
 </body>
-<footer id="footer" style="  position: fixed;
-left: 0;
-bottom: 0;
-width: 100%;
-text-align: center;">
-	Made with 💜 by Matteo Gassend and Vincent Ferrard
-</footer>
 
 </html>
