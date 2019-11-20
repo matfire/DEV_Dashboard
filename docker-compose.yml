@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  redis:
+    image: redis:latest
+  node :
+    build: ./node
+    depends_on: 
+     - redis
+    environment:
+      REDIS: redis
+    ports:
+      - "8080:8080"

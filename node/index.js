@@ -138,15 +138,6 @@ passport.use(
 			express:app
 		})
 		
-		
-		function requireLogin(req, res, next) {
-			if (!req.session || !req.session.user) {
-				res.redirect('/login');
-			} else {
-				next();
-			}
-		}
-		
 		app.get("/register", (req, res) => {
 			res.render("register.html")
 		})
@@ -173,7 +164,10 @@ passport.use(
 			}
 		})
 		
-		app.get("/", requireLogin, (req, res) => {
+		app.get("/", (req, res) => {
+			if (!req.user) {
+				res.redirect("/login")
+			}
 			res.render("home.html", {user:req.user})
 		})
 		
@@ -187,6 +181,87 @@ passport.use(
 			successRedirect: "/",
 			failureRedirect: "/login"
 		}))
+		app.get("/about.json", (req, res) => {
+			res.json({
+				client: {
+					host: req.ip
+				},
+				server: {
+					current_time: Math.floor(new Date() / 1000),
+					services: [
+						{
+							name: "weather",
+							widgets: [
+								{
+									name:"city_temperature",
+									description: "Display temperature for a city, based on the name or the geographical coordinates",
+									params: [
+										{
+											name: "city",
+											type: "string",
+											optional: true
+										},
+										{
+											name: "latitude",
+											type: "double",
+											optional: true
+										},
+										{
+											name: "longitude",
+											type:"double",
+											optional:true
+										}
+									]
+								}
+							]
+						},
+						{
+							name:"unsplash",
+							widgets: [
+								{
+									name:"background_picker",
+									description: "Search Unsplash's gallery and find an image to set as your background on the dashboard's main page",
+									params: [
+										{
+											name: "query",
+											type: "string",
+											optional: false
+										}
+									]
+								}
+							]
+						},
+						{
+							name:"spotify",
+							widgets: [
+								{
+									name:"device_info",
+									description: "Get a list of connected devices linked to your account and select the one that will play your music"
+								},
+								{
+									name:"jukebox",
+									description: "Play, pause, skip forward and backward on your playlist"
+								}
+							]
+						},
+						{
+							name:"digital_ocean",
+							widgets: [
+								{
+									name:"droplets",
+									description: "Get a list of droplets associated to your account",
+									params: []
+								},
+								{
+									name:"domains",
+									description: "Get a list of domains linked to your account"
+								}
+							]
+						}
+					]
+				}
+			})
+		})
 		
 		
 		app.listen(process.env.PORT || 8080, () => {
