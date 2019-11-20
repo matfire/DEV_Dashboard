@@ -33,7 +33,7 @@
 
 <script>
 	const baseSpotifyUrl = "https://api.spotify.com"
-	var deviceListTimer = 10000
+	var deviceListTimer = 5000
 	var deviceListTimerReturn;
 	function generateDeviceItem(name, id, is_active, type, volume) {
 		let li = document.createElement("li")
@@ -77,7 +77,7 @@
 					"Authorization": `Bearer ${token}`
 				}
 			})
-			if (res.ok && res.status == 200) {
+			if (res.ok && res.status === 200) {
 				let json = await res.json()
 				let ul = document.getElementById("spotifyDeviceList")
 				ul.innerHTML = ""
@@ -86,6 +86,8 @@
 					let li = generateDeviceItem(name, id, is_active, type, volume_percent)
 					ul.appendChild(li)
 				})
+			} else if (res.status === 401) {
+				UIkit.notification("Spotify access expired, please renew login with provider", "danger")
 			}
 		} catch {
 

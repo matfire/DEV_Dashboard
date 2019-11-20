@@ -44,14 +44,19 @@
 			console.log(json)
 		}
 	}
-
+	var dropletsDeviceTime = async function() {
+		await getDroplets()
+		clearTimeout(dropletTimerReturn)
+		setTimeout(dropletsDeviceTime, dropletTimerValue)
+	}
 
 	document.getElementById("digitalDroplets").onclick = () => {
 		document.getElementById("digitalDropletsContainer").style.visibility = "visible"
-		getDroplets()
+		dropletsDeviceTime()
 	}
 	document.getElementById("closeDroplets").onclick = () => {
 		document.getElementById("digitalDropletsContainer").style.visibility = "hidden"
+		clearTimeout(dropletTimerReturn)
 	}
 
 </script>

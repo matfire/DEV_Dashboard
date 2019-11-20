@@ -32,18 +32,18 @@
 					<li class="uk-nav-header">Widgets with authorization</li>
 					{% if user.spotifyToken %}
 					<li class="uk-parent">
-						<a href="#">Spotify</a>
+						<a href="/auth/spotify">Spotify</a>
 						<ul class="uk-nav-sub">
 							<li id="spotifyDeviceShower">Spotify Devices Info</li>
 							<li id="spotifyJukeboxShower">Spotify Jukebox</li>
 						</ul>
 					</li>
 					{% else %}
-					<li><a href="/auth/spotify">Spotify</a></li>
+					<li><a href="/auth/digitalocean">Spotify</a></li>
 					{% endif %}
 					{%if user.digitalOceanToken%}
 					<li class="uk-parent">
-						<a href="#">Digital Ocean</a>
+						<a href="">Digital Ocean</a>
 						<ul class="uk-nav-sub">
 							<li id="digitalDroplets">Droplets</li>
 						</ul>
@@ -54,6 +54,7 @@
 				</ul>
 			</div>
 		</div>
+		<div id="alertZone"></div>
 	{% if errors %}
 		{% for error in errors %}
 			<div class="uk-alert-danger" uk-alert>
