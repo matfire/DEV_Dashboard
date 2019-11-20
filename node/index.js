@@ -174,7 +174,6 @@ passport.use(
 		})
 		
 		app.get("/", requireLogin, (req, res) => {
-			//TODO:update tokens before rendering view: ie spotify
 			res.render("home.html", {user:req.user})
 		})
 		

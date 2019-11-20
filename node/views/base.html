@@ -7,6 +7,8 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Dashboard</title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.2.3/dist/css/uikit.min.css" />
+	<link rel="stylesheet" href="/style.css">
+
 	{%block head%}{%endblock%}
 </head>
 
@@ -14,6 +16,7 @@
 	<div id="page-container">
 		<div id="page-wrap">
 	<header>
+	<div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky" style="z-index: 1000;">
 		<nav class="uk-navbar-container" uk-navbar id="navId" style="background-color: lightblue;">
 			<div class="uk-navbar-left">
 					<a href="#offcanvas-menu" uk-toggle uk-icon="icon: menu; ratio:2" style="color: white;"></a>
@@ -22,6 +25,7 @@
 				<a href="" class="uk-navbar-item uk-logo" style="color: white;">DASHBOARD</a>
 			</div>
 		</nav>
+	</div>
 	</header>
 	<div id="offcanvas-menu" uk-offcanvas>
 			<div class="uk-offcanvas-bar">
@@ -46,6 +50,7 @@
 						<a href="">Digital Ocean</a>
 						<ul class="uk-nav-sub">
 							<li id="digitalDroplets">Droplets</li>
+							<li id="digitalDomains">Domains</li>
 						</ul>
 					</li>
 					{%else%}
@@ -87,7 +92,7 @@
 	{% endblock %}
 		</div>
 	<footer id="footer" >
-		Made with 💜 and 🍺 by Matteo Gassend and Vincent Ferrard
+		<p>Made with 💜 and 🍺 by Matteo Gassend and Vincent Ferrard</p>
 	</footer>
 	</div>
 </body>

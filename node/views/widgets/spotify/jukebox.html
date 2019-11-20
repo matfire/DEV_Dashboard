@@ -51,6 +51,9 @@
 				fillTracksDetails(json)
 			} else if (res.status === 204) {
 				$("#spotifyJukeboxContent").html(`No track is currently playing`)
+			} else if (res.status === 401) {
+				clearTimeout(devicePlayerTimerReturn);
+				UIkit.notification("Spotify access expired, please renew login with provider", "danger")
 			}
 		} catch {
 		}

@@ -1,9 +1,5 @@
 {% extends "base.html" %}
 
-{% block head %}
-<link rel="stylesheet" href="/style.css">
-{% endblock %}
-
 {% block body %}
 	<div class="uk-grid uk-text-center" uk-grid>
 		{% include "widgets/weather/index.html" %}
@@ -23,7 +19,6 @@
 			document.getElementById("footer").style.color = "white"
 			document.getElementById("navId").className += " uk-navbar-transparent"
 			document.getElementById("navId").style.backgroundColor = ""
-
 		}
 		$("#weatherContainer").draggable()
 		$("#backgroundImageContainer").draggable()
@@ -33,6 +28,7 @@
 		{%endif%}
 		{%if user.digitalOceanToken%}
 		$("#digitalDropletsContainer").draggable()
+		$("#digitalDomainsContainer").draggable()
 		{% endif %}
 	})
 </script>

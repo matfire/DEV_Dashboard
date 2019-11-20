@@ -88,6 +88,7 @@
 				})
 			} else if (res.status === 401) {
 				UIkit.notification("Spotify access expired, please renew login with provider", "danger")
+				clearTimeout(deviceListTimerReturn)
 			}
 		} catch {
 

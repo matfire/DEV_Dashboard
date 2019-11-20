@@ -47,7 +47,7 @@
 	var dropletsDeviceTime = async function() {
 		await getDroplets()
 		clearTimeout(dropletTimerReturn)
-		setTimeout(dropletsDeviceTime, dropletTimerValue)
+		dropletTimerReturn = setTimeout(dropletsDeviceTime, dropletTimerValue)
 	}
 
 	document.getElementById("digitalDroplets").onclick = () => {

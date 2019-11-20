@@ -1,0 +1,63 @@
+<div class="uk-card" id="digitalDomainsContainer" style="visibility : hidden;">
+	<div class="uk-card uk-card-default">
+		<div class="uk-card-header">
+				<h3 class="uk-card-title uk-align-left">Domain Info</h3> 
+				<div class="uk-align-right">
+					<span uk-icon="close" id="closeDomains" style="margin-right: 3px;"/>
+					<span uk-icon="info" uk-tooltip="See a list of all your owned domains pointed to Digital Ocean"/>
+				</div>
+		</div>
+		<div class="uk-card-body" >
+			<div id="digitalOceanDomains">
+
+			</div>
+		</div>
+		{# <div class="uk-card-footer">
+			<button id="positionDetection" class="uk-button uk-button-default">Detect Position</button> <a href="#spotifyModal" uk-toggle uk-icon="settings"></a>
+		</div> #}
+	</div>
+</div>
+
+<script>
+	let domainsTimerReturn;
+	let domainsTimerValue = 500000;
+	
+	const getDomains = async() => {
+		document.getElementById("digitalOceanDomains").innerHTML = '<div uk-spinner="ratio: 3"></div>'
+		let res = await fetch("https://api.digitalocean.com/v2/domains", {
+			headers: {
+				"Authorization": `Bearer ${DigitalOceanToken}` 
+			}
+		})
+		if (res.ok && res.status === 200) {
+			let json = await res.json()
+			document.getElementById("digitalOceanDomains").innerHTML = ""
+			let ul = document.createElement("ul")
+			ul.setAttribute("class", "uk-list")
+
+			json.domains.forEach(d => {
+				let li = document.createElement("li")
+				li.innerHTML = `${d.name} ${d.ttl}`
+
+				ul.appendChild(li)
+			})
+			document.getElementById("digitalOceanDomains").appendChild(ul)
+			console.log(json)
+		}
+	}
+	var domainsDeviceTime = async function() {
+		await getDomains()
+		clearTimeout(domainsTimerReturn)
+		domainsTimerReturn = setTimeout(domainsDeviceTime, domainsTimerValue)
+	}
+
+	document.getElementById("digitalDomains").onclick = () => {
+		document.getElementById("digitalDomainsContainer").style.visibility = "visible"
+		domainsDeviceTime()
+	}
+	document.getElementById("closeDomains").onclick = () => {
+		document.getElementById("digitalDomainsContainer").style.visibility = "hidden"
+		clearTimeout(domainsTimerReturn)
+	}
+
+</script>
