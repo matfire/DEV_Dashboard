@@ -100,7 +100,7 @@ passport.use(
 		app.use(bodyParser.urlencoded({extended:true}))
 		app.use("/users", userRouter)
 		app.use("/providers" ,providerRouter)
-		
+		app.use(express.static(__dirname + "/public"))
 		app.use(session({
 			secret: 'keyboard cat',
 			name: "_cookie",

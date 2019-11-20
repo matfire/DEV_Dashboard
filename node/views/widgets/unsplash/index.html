@@ -42,11 +42,11 @@
 				res.json().then((data) => {
 					let photos = data.results.slice(0, 3)
 					images = photos
-					let PhotosContainer = `<div class="uk-child-width-1-3" uk-grid >`
+					let PhotosContainer = `<div uk-grid >`
 					photos.forEach((p, index) => {
 						PhotosContainer += `<div>\
-							<div class="uk-inline uk-dark" id="unsplash${index}">\
-								<img src=${p.urls.regular} i/>\
+							<div class="uk-inline uk-dark uk-width-medium img-over-zoom" id="unsplash${index}">\
+								<img src=${p.urls.regular} width=50%/>\
 								<div class="uk-position-center">\
 									<span uk-overlay-icon></span>\
 								</div>\

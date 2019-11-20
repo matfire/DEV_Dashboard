@@ -4,12 +4,13 @@
 				<h3 class="uk-card-title uk-align-left">Spotify Info</h3> 
 				<div class="uk-align-right">
 					<span uk-icon="close" id="closeSpotify" style="margin-right: 3px;"/>
-					<span uk-icon="info" uk-tooltip="This widget allows you to see the current weather"/>
+					<span uk-icon="info" uk-tooltip="Get a timer-updated status of all spotify players, change their volume and playback status"/>
 				</div>
 		</div>
 		<div class="uk-card-body" >
-			<span id="weatherCity"></span>
-			<div id="weatherBody"></div>
+			<ul class="uk-list" id="spotifyDeviceList">
+
+			</ul>
 		</div>
 		<div class="uk-card-footer">
 			<button id="positionDetection" class="uk-button uk-button-default">Detect Position</button> <a href="#spotifyModal" uk-toggle uk-icon="settings"></a>
@@ -25,19 +26,65 @@
 			</div>
 			<p class="uk-text-right">
 				<button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-				<button class="uk-button uk-button-primary uk-modal-close" type="button" id="weatherButtonCitySelection">Save</button>
+				<button class="uk-button uk-button-primary uk-modal-close" type="button" id="spotifyButtonCitySelection">Save</button>
 			</p>
 		</div>
 	</div>
 
 <script>
+	const baseSpotifyUrl = "https://api.spotify.com"
+	var deviceListTimer = 5000
+	function generateDeviceItem(name, id, is_active, type, volume) {
+		let li = document.createElement("li")
+		let typeIcon = document.createElement("span")
+		switch(type) {
+			case "Computer":
+				typeIcon.setAttribute("uk-icon", "laptop")
+				break
+			case "Smartphone":
+				typeIcon.setAttribute("uk-icon", "phone")
+				break
+			default:
+				break
+		}
+		li.appendChild(typeIcon)
+		li.appendChild(document.createTextNode(name))
+		return li
+	}
+
+	async function getDeviceList() {
+		let token = "{{user.spotifyToken}}"
+		let res = await fetch(`${baseSpotifyUrl}/v1/me/player/devices`, {
+			headers: {
+				"Authorization": `Bearer ${token}`
+			}
+		})
+		if (res.ok) {
+			let json = await res.json()
+			console.log(json)
+			let ul = document.getElementById("spotifyDeviceList")
+			ul.innerHTML = ""
+			json.devices.forEach(device => {
+				let {name, id, is_active, type, volume_percent} = device
+				let li = generateDeviceItem(name, id, is_active, type, volume_percent)
+				ul.appendChild(li)
+			})
+		} else {
+			alert("Request failed")
+		}
+	}
+	var deviceListTime = async function() {
+		await getDeviceList()
+		setTimeout(deviceListTime, deviceListTimer)
+	}
 	document.getElementById("closeSpotify").onclick = (ev) => {		
 		document.getElementById("spotifyContainer").style.visibility = "hidden"
 	}
 	document.getElementById("spotifyShower").onclick = (ev) => {
 		document.getElementById("spotifyContainer").style.visibility = "visible"
 	}
-	document.onloadend = (ev) => {
-		console.log("loaded spotify")
-	}
+	document.addEventListener("DOMContentLoaded", async() => {
+		deviceListTime()
+	})
+
 </script>
