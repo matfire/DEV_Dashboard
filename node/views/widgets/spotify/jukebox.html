@@ -14,6 +14,7 @@
 				<span id="previousTrackJukebox" class="uk-button" uk-icon="chevron-double-left"></span>
 				<span id="playPauseJukeboxButton" class="uk-button"></span>
 				<span id="nextTrackJukebox" class="uk-button" uk-icon="chevron-double-right"></span>
+				<span id="reloadJukebox" class="uk-button" uk-icon="refresh"></span>
 		</div>
 	</div>
 </div>
@@ -56,6 +57,7 @@
 	}
 	var devicePlayerTime = async function() {
 		await getPlayerDetails()
+		clearTimeout(devicePlayerTimerReturn)
 		devicePlayerTimerReturn = setTimeout(devicePlayerTime, devicePlayerTimer)
 	}
 	document.getElementById("playPauseJukeboxButton").onclick = async(ev) => {
@@ -122,6 +124,9 @@
 			}
 		})
 		getPlayerDetails()
+	}
+	document.getElementById("reloadJukebox").onclick = () => {
+		devicePlayerTime()
 	}
 	document.addEventListener("DOMContentLoaded", async() => {
 		if (document.getElementById("spotifyJukeboxContainer").style.visibility === "visible") {

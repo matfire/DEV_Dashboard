@@ -53,6 +53,19 @@
 		}
 		li.appendChild(typeIcon)
 		li.appendChild(document.createTextNode(name))
+		li.onclick = async() => {
+			await fetch("https://api.spotify.com/v1/me/player", {
+				method: "PUT",
+				headers: {
+					Authorization : "Bearer {{user.spotifyToken}}"
+				},
+				body: JSON.stringify({
+					device_ids : [id],
+					play: true
+				})
+			})
+			await getDeviceList()
+		}
 		return li
 	}
 
@@ -80,6 +93,7 @@
 	}
 	var deviceListTime = async function() {
 		await getDeviceList()
+		clearTimeout(deviceListTimerReturn)
 		deviceListTimerReturn = setTimeout(deviceListTime, deviceListTimer)
 	}
 	document.getElementById("closeSpotify").onclick = (ev) => {		

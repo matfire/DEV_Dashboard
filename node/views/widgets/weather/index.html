@@ -32,8 +32,9 @@
 
 <script>
 		function displayTemp(temp, icon) {
+			document.getElementById("weatherCity").innerText = ""
 			document.getElementById("weatherBody").innerHTML = `\
-			<img data-src="https://openweathermap.org/img/w/${icon}.png" uk-img/>\
+			<img data-src="https://openweathermap.org/img/w/${icon}.png" uk-img width=200/> <br />\
 			<span>${temp}</span>\
 			`
 		}
@@ -49,8 +50,8 @@
 			document.getElementById("weatherBody").innerHTML = '<div uk-spinner="ratio: 3"></div>'
 			fetch("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&APPID=9d9ab4467244bce9a0a31fcbeb8ecb4c").then((res) => {
 				res.json().then((data) => {
-					document.getElementById("weatherCity").innerText = city
 					displayTemp(data.main.temp, data.weather[0].icon)
+					document.getElementById("weatherCity").innerText = city
 					UIkit.notification("<span uk-icon='icon: check'></span> Settings updated");
 				})
 			})
