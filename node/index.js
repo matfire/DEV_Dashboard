@@ -75,8 +75,8 @@ passport.use(
 
 passport.use(
 	new DigitalOceanStrategy({
-		clientID: "a854f75482023fefd03b59af436cde7a739c2afd9a62959010157acba46b8673",
-		clientSecret: "64599a2d29f7ad84ff87023520552e4e915011c79a27a6149b76267919a00029",
+		clientID: "25e9d013ad670adc156ec5caf37ea573bab2abd392707358eacb4040cfa79e02",
+		clientSecret: "d050bf12ded09a7877376f591f16ff27612a598e66e122f1652cc85fdb31b055",
 		callbackURL: "https://demo.dashboard.nirah.tech/auth/digitalocean"
 	},
 		async function (accessToken, refreshToken, expires_in, profile, done) {
