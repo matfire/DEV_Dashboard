@@ -1,7 +1,10 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-mongoose.connect('mongodb://matteo:matteo99@ds345028.mlab.com:45028/dashboard', {useNewUrlParser: true, useUnifiedTopology:true});
+mongoose.connect(
+  "mongodb://localhost:27017myFirstDatabase?retryWrites=true&w=majority",
+  { useNewUrlParser: true, useUnifiedTopology: true }
+);
 
-var db = mongoose.connection
+var db = mongoose.connection;
 
-module.exports = db
+module.exports = db;

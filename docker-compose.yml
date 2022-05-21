@@ -3,10 +3,19 @@ version: "3"
 services:
   redis:
     image: redis:latest
-  node :
+    ports:
+      - "6379:6379"
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+  node:
     build: ./node
-    depends_on: 
-     - redis
+    depends_on:
+      - redis
     environment:
       REDIS: redis
     ports:

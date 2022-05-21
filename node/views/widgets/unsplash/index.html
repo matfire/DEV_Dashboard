@@ -45,8 +45,10 @@
 					let PhotosContainer = `<div uk-grid >`
 					photos.forEach((p, index) => {
 						PhotosContainer += `<div>\
-							<div class="uk-inline uk-dark uk-width-medium img-over-zoom" id="unsplash${index}">\
-								<img src=${p.urls.regular} width=50%/>\
+							<div class="uk-inline uk-dark uk-width-medium" id="unsplash${index}">\
+								<div class="uk-inline-clip uk-transition-toggle">\
+									<img src=${p.urls.regular} class="uk-transition-scale-up uk-transition-opaque"/>\
+								</div>\
 								<div class="uk-position-center">\
 									<span uk-overlay-icon></span>\
 								</div>\
