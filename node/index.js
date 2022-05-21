@@ -77,7 +77,7 @@ passport.use(
 	new DigitalOceanStrategy({
 		clientID: "a854f75482023fefd03b59af436cde7a739c2afd9a62959010157acba46b8673",
 		clientSecret: "64599a2d29f7ad84ff87023520552e4e915011c79a27a6149b76267919a00029",
-		callbackURL: "http://localhost:8080/auth/digitalocean"
+		callbackURL: "https://demo.dashboard.nirah.tech/auth/digitalocean"
 	},
 		async function (accessToken, refreshToken, expires_in, profile, done) {
 			let res = await fetch("https://api.digitalocean.com/v2/account", {
@@ -101,7 +101,7 @@ passport.use(
 		{
 			clientID: "2cfa586c6c43457aadb736344d842dcc",
 			clientSecret: "c3f63fd9f633466f801fce7634af383c",
-			callbackURL: 'http://localhost:8080/auth/spotify',
+			callbackURL: 'https://demo.dashboard.nirah.tech/auth/spotify',
 		},
 		async function (accessToken, refreshToken, expires_in, profile, done) {
 			var user = await User.findOne({ email: profile.emails[0].value })
